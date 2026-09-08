@@ -14,6 +14,7 @@ dependencies {
     implementation(project(":server:libs:platform:platform-tag:platform-tag-api"))
 
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("com.h2database:h2")
     testImplementation("org.mockito:mockito-core")
     testImplementation("org.mockito:mockito-junit-jupiter")
     testImplementation("org.springframework.boot:spring-boot-starter-data-jdbc")
