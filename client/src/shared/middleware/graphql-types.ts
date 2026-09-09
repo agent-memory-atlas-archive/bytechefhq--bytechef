@@ -546,7 +546,6 @@ export type ComponentDefinitionTuple = {
   value: Array<Maybe<ComponentDefinition>>;
 };
 
-/** Which kind of operation a component's properties belong to. */
 export enum ComponentOperationType {
   Action = 'ACTION',
   ClusterElement = 'CLUSTER_ELEMENT',
@@ -2389,6 +2388,15 @@ export type MutationUpdateWorkspaceApiKeyArgs = {
   name: Scalars['String']['input'];
 };
 
+export type NodeValidationIssue = {
+  __typename?: 'NodeValidationIssue';
+  kind: WorkflowIssueKind;
+  message: Scalars['String']['output'];
+  nodeName: Scalars['String']['output'];
+  propertyPath?: Maybe<Scalars['String']['output']>;
+  severity: WorkflowIssueSeverity;
+};
+
 export type NullProperty = Property & {
   __typename?: 'NullProperty';
   advancedOption?: Maybe<Scalars['Boolean']['output']>;
@@ -2671,11 +2679,6 @@ export type Query = {
   componentDefinitionSearch: Array<ComponentDefinition>;
   componentDefinitionVersions: Array<ComponentDefinition>;
   componentDefinitions: Array<ComponentDefinition>;
-  /**
-   * Display conditions for an operation's properties evaluated against a standalone parameter map, for property
-   * forms that have no workflow — a tool config dialog, an MCP tool popover, a connection dialog. Returns the
-   * conditions that hold; a condition absent from the map is false.
-   */
   componentPropertyDisplayConditions: Scalars['Map']['output'];
   connectedUser?: Maybe<ConnectedUser>;
   connectedUserMcpServers: Array<ConnectedUserMcpServer>;
@@ -3404,11 +3407,13 @@ export type QueryUsersArgs = {
 
 
 export type QueryValidateWorkflowArgs = {
+  environmentId?: InputMaybe<Scalars['Long']['input']>;
   workflow: Scalars['String']['input'];
 };
 
 
 export type QueryValidateWorkflowByIdArgs = {
+  environmentId?: InputMaybe<Scalars['Long']['input']>;
   workflowId: Scalars['String']['input'];
 };
 
@@ -3724,6 +3729,22 @@ export type WorkflowInfo = {
   label: Scalars['String']['output'];
 };
 
+export enum WorkflowIssueKind {
+  BrokenReference = 'BROKEN_REFERENCE',
+  DuplicateNodeName = 'DUPLICATE_NODE_NAME',
+  MissingClusterElement = 'MISSING_CLUSTER_ELEMENT',
+  MissingRequired = 'MISSING_REQUIRED',
+  MissingResource = 'MISSING_RESOURCE',
+  Other = 'OTHER',
+  TaskOrder = 'TASK_ORDER',
+  TypeMismatch = 'TYPE_MISMATCH'
+}
+
+export enum WorkflowIssueSeverity {
+  Error = 'ERROR',
+  Warning = 'WARNING'
+}
+
 export type WorkflowNodeTestOutputResult = {
   __typename?: 'WorkflowNodeTestOutputResult';
   id: Scalars['Long']['output'];
@@ -3769,5 +3790,6 @@ export type WorkflowTrigger = {
 export type WorkflowValidationResult = {
   __typename?: 'WorkflowValidationResult';
   errors: Array<Scalars['String']['output']>;
+  nodeIssues: Array<NodeValidationIssue>;
   warnings: Array<Scalars['String']['output']>;
 };
